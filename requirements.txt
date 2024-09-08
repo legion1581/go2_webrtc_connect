@@ -1,0 +1,3 @@
+aiortc
+pycryptodome
+opencv-python

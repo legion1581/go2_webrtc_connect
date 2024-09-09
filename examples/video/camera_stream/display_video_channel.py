@@ -8,11 +8,6 @@ from aiortc.contrib.media import MediaRecorder
 # Enable logging for debugging
 logging.basicConfig(level=logging.FATAL)
 
-# Define the output video file and format
-output_filename = 'output_video.mp4'
-
-# Initialize the MediaRecorder instance
-recorder = MediaRecorder(output_filename)
 
 # Function to handle receiving video frames and recording them
 async def recv_camera_stream(track: MediaStreamTrack):
@@ -43,17 +38,14 @@ async def main():
         conn.video.switchVideoChannel(True)
 
         # Add callback to handle received video frames (track)
-        conn.video.add_track_callback(lambda track: asyncio.create_task(recv_camera_stream(track)))
+        conn.video.add_track_callback(recv_camera_stream)
 
-        # Keep the program running while recording
-        await asyncio.sleep(20)  # Run for 20 seconds or adjust as needed
+        # Keep the program running 
+        await asyncio.sleep(3600) 
 
     except ValueError as e:
         logging.error(f"Error in WebRTC connection: {e}")
 
-    finally:
-        # Ensure that the recorder is properly stopped and closed
-        await recorder.stop()
 
 if __name__ == "__main__":
     asyncio.run(main())

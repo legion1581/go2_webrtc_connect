@@ -203,22 +203,5 @@ class Go2WebRTCConnection:
         logging.debug("Local SDP created: %s", sdp_offer_json)
 
         return peer_answer_json
-    
-    async def send_mp3_stream(self):
-        """
-        Replace the dummy audio track with an MP3 audio stream.
-        """
-        if self.pc is None:
-            logging.error("RTCPeerConnection is not initialized.")
-            return
 
-        mp3_path = os.path.join(os.path.dirname(__file__), "dora-doradura-mp3.mp3")
-        player = MediaPlayer(mp3_path)
-        audio_track = player.audio  # Get the audio track from the player
-
-        senders = self.pc.getSenders()
-        for sender in senders:
-            if sender.track and sender.track.kind == "audio":
-                sender.replaceTrack(audio_track)
-                logging.info("Replaced dummy audio track with MP3 audio stream.")
 

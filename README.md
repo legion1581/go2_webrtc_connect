@@ -17,7 +17,6 @@ There are video (recvonly) and audio (sendrecv) channels in WebRTC that you can 
 ## Lidar support
 
 There is a lidar decoder built in, so you can handle decoded PoinClouds directly. Check out the examples in the `/example` folder.
-Thanks @tfoldi 
 
 ## Connection Methods
 
@@ -56,7 +55,9 @@ The driver has a built-in Multicast scanner to find the Unitree Go2 on the local
 
 ```sh
 cd ~
+sudo apt update
 sudo apt install python3-pip
+sudo apt install portaudio19-dev
 git clone --recurse-submodules https://github.com/legion1581/go2_webrtc_connect.git
 cd go2_webrtc_connect
 pip install -e .

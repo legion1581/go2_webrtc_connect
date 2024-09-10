@@ -162,15 +162,15 @@ class Go2WebRTCConnection:
             peer_answer_json = await self.get_answer_from_remote_peer(self.pc, turn_server_info)
         elif self.connectionMethod == WebRTCConnectionMethod.LocalSTA or self.connectionMethod == WebRTCConnectionMethod.LocalAP:
             peer_answer_json = await self.get_answer_from_local_peer(self.pc, self.ip)
-        
-        peer_answer = json.loads(peer_answer_json)
 
-        if not peer_answer:
-            logging.error("Could not get SDP from the peer")
+        if peer_answer_json is not None:
+            peer_answer = json.loads(peer_answer_json)
+        else:
+            print("Could not get SDP from the peer. Check if the Go2 is switched on or try using another connection method.")
             return
-        elif peer_answer['sdp'] == "reject":
-            logging.error("Connected by another terminal. Please try again later.")
-            print("Connected by another terminal. Please try again later.")
+
+        if peer_answer['sdp'] == "reject":
+            print("Go2 is connected by another WebRTC client. Please try again later.")
             return
 
         remote_sdp = RTCSessionDescription(sdp=peer_answer['sdp'], type=peer_answer['type']) 
@@ -207,8 +207,6 @@ class Go2WebRTCConnection:
         }
 
         peer_answer_json = send_sdp_to_local_peer(ip, json.dumps(sdp_offer_json))
-
-        logging.debug("Local SDP created: %s", sdp_offer_json)
 
         return peer_answer_json
 

@@ -7,7 +7,7 @@ import cv2
 import os
 
 # Enable logging for debugging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.FATAL)
 
 # This function receives video frames from the camera stream
 async def recv_camera_stream(track: MediaStreamTrack):

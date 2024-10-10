@@ -52,7 +52,7 @@ async def main():
 
         # Define a callback function to handle multiplestate when received.
         def multiplestate_callback(message):
-            current_message = message['data']
+            current_message = message
             
             display_data(current_message)
 

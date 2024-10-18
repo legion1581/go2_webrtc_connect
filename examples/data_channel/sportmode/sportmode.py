@@ -36,7 +36,7 @@ async def main():
         if current_motion_switcher_mode != "normal":
             print(f"Switching motion mode from {current_motion_switcher_mode} to 'normal'...")
             await conn.datachannel.pub_sub.publish_request_new(
-                RTC_TOPIC["MOTION_SWITCHER"], 
+                RTC_TOPIC["SPORT_MOD"], 
                 {
                     "api_id": 1002,
                     "parameter": {"name": "normal"}

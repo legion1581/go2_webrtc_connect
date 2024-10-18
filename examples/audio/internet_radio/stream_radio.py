@@ -1,5 +1,6 @@
 import logging
 import asyncio
+import sys
 from go2_webrtc_driver.webrtc_driver import Go2WebRTCConnection, WebRTCConnectionMethod
 from aiortc.contrib.media import MediaPlayer
 
@@ -29,4 +30,9 @@ async def main():
         logging.error(e)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        # Handle Ctrl+C to exit gracefully.
+        print("\nProgram interrupted by user")
+        sys.exit(0)

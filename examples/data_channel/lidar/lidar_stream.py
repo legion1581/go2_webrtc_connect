@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import sys
 from go2_webrtc_driver.webrtc_driver import Go2WebRTCConnection, WebRTCConnectionMethod
 
 # Enable logging for debugging
@@ -38,4 +39,9 @@ async def main():
         logging.error(f"An error occurred: {e}")
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        # Handle Ctrl+C to exit gracefully.
+        print("\nProgram interrupted by user")
+        sys.exit(0)

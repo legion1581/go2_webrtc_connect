@@ -1,8 +1,7 @@
 import asyncio
 import logging
 import json
-import os
-import cv2
+import sys
 from aiortc import RTCPeerConnection, RTCSessionDescription, RTCIceServer, RTCConfiguration
 from aiortc.contrib.media import MediaPlayer
 from .unitree_auth import send_sdp_to_local_peer, send_sdp_to_remote_peer
@@ -22,6 +21,7 @@ class Go2WebRTCConnection:
         self.sn = serialNumber
         self.ip = ip
         self.connectionMethod = connectionMethod
+        self.isConnected = False
         self.token = fetch_token(username, password) if username and password else ""
 
     async def connect(self):
@@ -46,6 +46,18 @@ class Go2WebRTCConnection:
         elif self.connectionMethod == WebRTCConnectionMethod.LocalAP:
             self.ip = "192.168.12.1"
             await self.init_webrtc(ip=self.ip)
+    
+    async def disconnect(self):
+        if self.pc:
+            await self.pc.close()
+            self.pc = None
+        self.isConnected = False
+        print_status("WebRTC connection", "🔴 disconnected")
+
+    async def reconnect(self):
+        await self.disconnect()
+        await self.connect()
+        print_status("WebRTC connection", "🟢 reconnected")
 
     def create_webrtc_configuration(self, turn_server_info, stunEnable=True, turnEnable=True) -> RTCConfiguration:
         ice_servers = []
@@ -121,8 +133,10 @@ class Go2WebRTCConnection:
             if state == "connecting":
                 print_status("Peer Connection State", "🔵 connecting")
             elif state == "connected":
+                self.isConnected= True
                 print_status("Peer Connection State", "🟢 connected")
             elif state == "closed":
+                self.isConnected= False
                 print_status("Peer Connection State", "⚫ closed")
             elif state == "failed":
                 print_status("Peer Connection State", "🔴 failed")
@@ -166,16 +180,16 @@ class Go2WebRTCConnection:
         if peer_answer_json is not None:
             peer_answer = json.loads(peer_answer_json)
         else:
-            print("Could not get SDP from the peer. Check if the Go2 is switched on or try using another connection method.")
-            return
+            print("Could not get SDP from the peer. Check if the Go2 is switched on")
+            sys.exit(1)
 
         if peer_answer['sdp'] == "reject":
-            print("Go2 is connected by another WebRTC client. Please try again later.")
-            return
+            print("Go2 is connected by another WebRTC client. Close your mobile APP and try again.")
+            sys.exit(1)
 
         remote_sdp = RTCSessionDescription(sdp=peer_answer['sdp'], type=peer_answer['type']) 
         await self.pc.setRemoteDescription(remote_sdp)
-
+   
         await self.datachannel.wait_datachannel_open()
 
     

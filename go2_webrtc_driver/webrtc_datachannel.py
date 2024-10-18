@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import struct
+import sys
 from .msgs.pub_sub import WebRTCDataChannelPubSub
 from .lidar.lidar_decoder import LidarDecoder
 from .msgs.heartbeat import WebRTCDataChannelHeartBeat
@@ -32,6 +33,7 @@ class WebRTCDataChannel:
             self.heartbeat.start_heartbeat()
             self.rtc_inner_req.network_status.start_network_status_fetch()
             print_status("Data Channel Verification", "✅ OK")
+            
 
         self.validaton.set_on_validate_callback(on_validate)
 
@@ -102,7 +104,8 @@ class WebRTCDataChannel:
         try:
             await asyncio.wait_for(self._wait_for_open(), timeout)
         except asyncio.TimeoutError:
-            logging.error("Data channel did not open in time")
+            print("Data channel did not open in time")
+            sys.exit(1)
 
     async def _wait_for_open(self):
         """Internal function that waits for the data channel to be opened."""

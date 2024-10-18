@@ -87,4 +87,9 @@ async def main():
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        # Handle Ctrl+C to exit gracefully.
+        print("\nProgram interrupted by user")
+        sys.exit(0)

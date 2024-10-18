@@ -4,6 +4,7 @@ import logging
 import random
 import requests
 import time
+import sys
 from Crypto.PublicKey import RSA
 from .unitree_auth import make_remote_request
 from .encryption import rsa_encrypt, rsa_load_public_key, aes_decrypt, generate_aes_key

@@ -5,6 +5,7 @@ import urllib.parse
 import base64
 import logging
 import json
+import sys
 from Crypto.PublicKey import RSA
 from .encryption import aes_encrypt, generate_aes_key, rsa_encrypt, aes_decrypt, rsa_load_public_key
 
@@ -125,7 +126,8 @@ def send_sdp_to_remote_peer(serial: str, sdp: str, access_token: str, public_key
         logging.info("Received SDP Answer from Go2!")
         return aes_decrypt(response['data'], aes_key)
     elif response.get("code") == 1000:
-        raise ValueError("Device not online")
+        print("Device not online")
+        sys.exit(1)
     else:
         raise ValueError(f"Failed to receive SDP Answer: {response}")
     

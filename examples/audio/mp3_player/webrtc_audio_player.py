@@ -54,7 +54,7 @@ async def main():
         # Play the uploaded audio file using its filename as UUID
         
         print(f"Starting audio playback of file: {uuid}")
-        # await audio_hub.play_by_uuid(uuid)
+        await audio_hub.play_by_uuid(uuid)
         logger.info("Audio playback completed")
 
 

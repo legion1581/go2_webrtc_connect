@@ -11,6 +11,8 @@ setup(
         'pycryptodome',
         'opencv-python',
         'sounddevice',
-        'pyaudio'
+        'pyaudio',
+        'requests',
+        'wasmtime'
     ],
 )

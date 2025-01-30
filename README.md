@@ -7,7 +7,7 @@ This repository contains a Python implementation of the WebRTC driver to connect
 ## Supported Versions
 
 The currently supported firmware packages are:
-- 1.1.1 - 1.1.2(latest available)
+- 1.1.1 - 1.1.3 (latest available)
 - 1.0.19 - 1.0.25
 
 ## Audio and Video Support

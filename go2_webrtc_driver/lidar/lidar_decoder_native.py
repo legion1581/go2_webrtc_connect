@@ -56,6 +56,6 @@ class LidarDecoder:
             return points
 
         return {
-                "points": points,
-                "raw": compressed_data,
+                "points": points(),
+                # "raw": compressed_data,
         }

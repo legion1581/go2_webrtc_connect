@@ -13,6 +13,7 @@ setup(
         'sounddevice',
         'pyaudio',
         'requests',
-        'wasmtime'
+        'wasmtime',
+        'flask-socketio'
     ],
 )

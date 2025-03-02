@@ -4,7 +4,7 @@ import logging
 import struct
 import sys
 from .msgs.pub_sub import WebRTCDataChannelPubSub
-from .lidar.lidar_decoder import LidarDecoder
+from .lidar.lidar_decoder_unified import UnifiedLidarDecoder
 from .msgs.heartbeat import WebRTCDataChannelHeartBeat
 from .msgs.validation import WebRTCDataChannelValidaton
 from .msgs.rtc_inner_req import WebRTCDataChannelRTCInnerReq
@@ -13,7 +13,6 @@ from .msgs.error_handler import handle_error
 
 from .constants import DATA_CHANNEL_TYPE
 
-decoder = LidarDecoder()
 
 class WebRTCDataChannel:
     def __init__(self, conn, pc) -> None:
@@ -26,6 +25,8 @@ class WebRTCDataChannel:
         self.heartbeat = WebRTCDataChannelHeartBeat(self.channel, self.pub_sub)
         self.validaton = WebRTCDataChannelValidaton(self.channel, self.pub_sub)
         self.rtc_inner_req = WebRTCDataChannelRTCInnerReq(self.conn, self.channel, self.pub_sub)
+
+        self.set_decoder(decoder_type = 'libvoxel')
 
         #Event handler for Validation succeed
         def on_validate():
@@ -70,7 +71,7 @@ class WebRTCDataChannel:
                 if isinstance(message, str):
                     parsed_data = json.loads(message)
                 elif isinstance(message, bytes):
-                    parsed_data = WebRTCDataChannel.deal_array_buffer(message)
+                    parsed_data = self.deal_array_buffer(message)
                 
                 # Resolve any pending futures or callbacks associated with this message
                 self.pub_sub.run_resolve(parsed_data)
@@ -112,34 +113,34 @@ class WebRTCDataChannel:
         while not self.data_channel_opened:
             await asyncio.sleep(0.1)
     
-    @staticmethod
-    def deal_array_buffer(buffer):
+
+    def deal_array_buffer(self, buffer):
         header_1, header_2 = struct.unpack_from('<HH', buffer, 0)
         if header_1 == 2 and header_2 == 0:
-            return WebRTCDataChannel.deal_array_buffer_for_lidar(buffer[4:])
+            return self.deal_array_buffer_for_lidar(buffer[4:])
         else:
-            return WebRTCDataChannel.deal_array_buffer_for_normal(buffer)
-    @staticmethod
-    def deal_array_buffer_for_normal(buffer):
+            return self.deal_array_buffer_for_normal(buffer)
+
+    def deal_array_buffer_for_normal(self, buffer):
         header_length, = struct.unpack_from('<H', buffer, 0)
         json_data = buffer[4:4 + header_length]
         binary_data = buffer[4 + header_length:]
 
         decoded_json = json.loads(json_data.decode('utf-8'))
 
-        decoded_data = decoder.decode(binary_data, decoded_json['data'])
+        decoded_data = self.decoder.decode(binary_data, decoded_json['data'])
 
         decoded_json['data']['data'] = decoded_data
         return decoded_json
-    @staticmethod
-    def deal_array_buffer_for_lidar(buffer):
+
+    def deal_array_buffer_for_lidar(self, buffer):
         header_length, = struct.unpack_from('<I', buffer, 0)
         json_data = buffer[8:8 + header_length]
         binary_data = buffer[8 + header_length:]
 
         decoded_json = json.loads(json_data.decode('utf-8'))
 
-        decoded_data = decoder.decode(binary_data, decoded_json['data'])
+        decoded_data = self.decoder.decode(binary_data, decoded_json['data'])
 
         decoded_json['data']['data'] = decoded_data
         return decoded_json
@@ -180,5 +181,18 @@ class WebRTCDataChannel:
             DATA_CHANNEL_TYPE["AUD"],
         )
         print(f"Audio channel: {'on' if switch else 'off'}")
+    
+    def set_decoder(self, decoder_type):
+        """
+        Set the decoder to be used for decoding incoming data.
+
+        :param decoder_type: The type of decoder to use ("libvoxel" or "native").
+        """
+        if decoder_type not in ["libvoxel", "native"]:
+            raise ValueError("Invalid decoder type. Choose 'libvoxel' or 'native'.")
+
+        # Create an instance of UnifiedLidarDecoder with the specified type
+        self.decoder = UnifiedLidarDecoder(decoder_type=decoder_type)
+        print(f"Decoder set to: {self.decoder.get_decoder_name()}")
     
     

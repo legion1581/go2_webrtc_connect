@@ -34,6 +34,9 @@ This script processes compressed LiDAR data using two decoders: **libvoxel** and
 ---
 # LiDAR Plot Example (`plot_lidar_stream.py`)
 
+![plot_lidar_dots](../../../images/plot_lidar_1.png)
+![plot_lidar_voxel](../../../images/plot_lidar_2.png)
+
 This script visualizes LiDAR data using three.js. View the result at [http://127.0.0.1:8080/](http://127.0.0.1:8080/).
 
 ## Usage

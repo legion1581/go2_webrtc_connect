@@ -53,28 +53,29 @@ The driver has a built-in Multicast scanner to find the Unitree Go2 on the local
 
 ## Installation
 
+
+Build venv
+
 ```sh
 cd ~
 sudo apt update
 sudo apt install python3-pip
 sudo apt install portaudio19-dev
-git clone --recurse-submodules https://github.com/legion1581/go2_webrtc_connect.git
-cd go2_webrtc_connect
+git clone --recurse-submodules https://github.com/MarcoDuesentrieb/mech_project.git
+cd mech_project
+python -m venv .venv
+source .venv/bin/activate
 pip install -e .
 ```
 
 ## Usage 
 Example programs are located in the /example directory.
 
-### Thanks
+## Camera calibration
 
-A big thank you to TheRoboVerse community! Visit us at [TheRoboVerse](https://theroboverse.com) for more information and support.
-
-Special thanks to the [tfoldi WebRTC project](https://github.com/tfoldi/go2-webrtc) and [abizovnuralem](https://github.com/abizovnuralem) for adding LiDAR support and [MrRobotow](https://github.com/MrRobotoW) for providing a plot LiDAR example.
-
- 
-### Support
-
-If you like this project, please consider buying me a coffee:
-
-<a href="https://www.buymeacoffee.com/legion1581" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+- What is lens distortion and camera calibration? 
+  - intro: https://de.mathworks.com/help/vision/ug/camera-calibration.html
+  - in depth: https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html
+- Calibration has already been done. the obtained data is stored in `examples/ost.yaml`
+- How to undistort the camera image: 
+  - from section "Undistortion": https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html

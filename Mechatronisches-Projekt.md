@@ -75,8 +75,12 @@ Zusätzlich soll der Roboter seine eigene **Geometrie ins Kamerabild projizieren
 ## Literatur:  
 
 Kamera: 
-- [https://de.mathworks.com/help/vision/ug/camera-calibration.html](https://de.mathworks.com/help/vision/ug/camera-calibration.html)
-- [https://wiki.ros.org/camera_calibration](https://wiki.ros.org/camera_calibration)
+- What is lens distortion and camera calibration? 
+  - [https://de.mathworks.com/help/vision/ug/camera-calibration.html](https://de.mathworks.com/help/vision/ug/camera-calibration.html)
+  - [https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html](https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html)
+  - [https://wiki.ros.org/camera_calibration](https://wiki.ros.org/camera_calibration)
+- How to undistort the camera image: 
+  - from section "Undistortion": [https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html](https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html)
 
 Technologien:
 - https://github.com/freddyaboulton/fastrtc
@@ -89,7 +93,3 @@ Go2:
 Vorlesung: 
 - MTB: ITEC - Software Engineering
 - DEB: Technische Informatik
-
-
-
-

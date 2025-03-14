@@ -70,12 +70,3 @@ pip install -e .
 
 ## Usage 
 Example programs are located in the /example directory.
-
-## Camera calibration
-
-- What is lens distortion and camera calibration? 
-  - intro: https://de.mathworks.com/help/vision/ug/camera-calibration.html
-  - in depth: https://docs.opencv.org/4.x/d9/d0c/group__calib3d.html
-- Calibration has already been done. the obtained data is stored in `examples/ost.yaml`
-- How to undistort the camera image: 
-  - from section "Undistortion": https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html

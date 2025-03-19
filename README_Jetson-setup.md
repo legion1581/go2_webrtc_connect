@@ -11,3 +11,6 @@ Works for (Jetpack 6):
 pip install requests wasmtime keyboard pyyaml
 ```
 
+## Nice links
+
+https://wiki.theroboverse.com/

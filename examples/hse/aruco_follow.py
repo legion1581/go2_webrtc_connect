@@ -55,7 +55,7 @@ RAD2DEG = 180.0/pi
 logging.basicConfig(level=logging.WARN)
 
 MARKER_ID = 0
-IP_ADDRESS = "192.168.0.199"
+IP_ADDRESS = "192.168.4.219"
 CAMERA_CALIBRATION_DATA = "ost.yaml"
 V_MAX = 1.0         # Maximum translational velocity (m/s)
 V_MIN = 0.25        # Maximum translational velocity (m/s)
@@ -174,6 +174,7 @@ def main():
     asyncio_thread = threading.Thread(target=run_asyncio_loop, args=(loop,))
     asyncio_thread.start()
 
+    counter = 1000
     try:
         corners = None
         rvecs = None
@@ -184,6 +185,12 @@ def main():
             if not frame_queue.empty():
                 img = frame_queue.get()
                 img_greyscale = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+                if True: #TODO: schoen machen
+                    image_dir = "./temp" #TODO: schoen machen
+                    counter = counter + 1
+                    cv2.imwrite(image_dir+f"image{counter}.png", img)
+
                 corners, ids, rejected = detector.detectMarkers(img_greyscale)
                 if ids is not None:
                     aruco.drawDetectedMarkers(img, corners, ids)

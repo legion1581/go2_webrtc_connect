@@ -55,7 +55,7 @@ RAD2DEG = 180.0/pi
 logging.basicConfig(level=logging.WARN)
 
 MARKER_ID = 0
-IP_ADDRESS = "192.168.4.219"
+IP_ADDRESS = "192.168.4.198"
 CAMERA_CALIBRATION_DATA = "ost.yaml"
 V_MAX = 1.0         # Maximum translational velocity (m/s)
 V_MIN = 0.25        # Maximum translational velocity (m/s)

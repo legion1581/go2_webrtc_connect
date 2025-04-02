@@ -40,7 +40,7 @@ cv2.imshow('Video', img)
 cv2.waitKey(1)  # Ensure the window is created
 
 # Constants 
-IP_ADDRESS = "192.168.4.219"
+IP_ADDRESS = "192.168.4.202"
 
 # Enable logging for debugging
 logging.basicConfig(level=logging.WARN)

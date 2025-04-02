@@ -174,7 +174,6 @@ def main():
     asyncio_thread = threading.Thread(target=run_asyncio_loop, args=(loop,))
     asyncio_thread.start()
 
-    counter = 1000
     try:
         corners = None
         rvecs = None
@@ -185,11 +184,6 @@ def main():
             if not frame_queue.empty():
                 img = frame_queue.get()
                 img_greyscale = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-
-                if True: #TODO: schoen machen
-                    image_dir = "./temp" #TODO: schoen machen
-                    counter = counter + 1
-                    cv2.imwrite(image_dir+f"image{counter}.png", img)
 
                 corners, ids, rejected = detector.detectMarkers(img_greyscale)
                 if ids is not None:

@@ -25,13 +25,7 @@ Note:
 import asyncio
 import cv2
 import numpy as np
-import logging
-import threading
-import time
-from queue import Queue
 from dog import Dog, ControlMode
-from go2_webrtc_driver.webrtc_driver import Go2WebRTCConnection, WebRTCConnectionMethod
-from aiortc import MediaStreamTrack
 
 # Create an OpenCV window and display a blank image
 height, width = 720, 1280  # Adjust the size as needed
@@ -39,17 +33,53 @@ img = np.zeros((height, width, 3), dtype=np.uint8)
 cv2.imshow('Video', img)
 cv2.waitKey(1)  # Ensure the window is created
 
+import logging
+import threading
+import time
+import yaml
+from os import path
+from queue import Queue
+from go2_webrtc_driver.webrtc_driver import Go2WebRTCConnection, WebRTCConnectionMethod
+from go2_webrtc_driver.constants import VUI_COLOR
+from aiortc import MediaStreamTrack
+
 # Constants 
 IP_ADDRESS = "192.168.4.202"
+CAMERA_CALIBRATION_DATA = "ost.yaml"
 
 # Enable logging for debugging
 logging.basicConfig(level=logging.WARN)
+
+def load_camera_parameters(yaml_file):
+    # Default values in case the file does not exist
+    camera_matrix = np.eye(3, dtype=np.float32)
+    dist_coeffs = np.ones(5, dtype=np.float32)
+
+    try:    
+        with open(yaml_file, 'r') as file:
+            data = yaml.safe_load(file)
+    
+        # Extract camera matrix
+        camera_matrix = np.array(data['camera_matrix']['data']).reshape(3, 3)
+        
+        # Extract distortion coefficients
+        dist_coeffs = np.array(data['distortion_coefficients']['data'])
+    except FileNotFoundError:
+        print("ERROR - File not found: " + yaml_file)
+        print("The camera matrix will be set to the unity matrix.\n \
+              The distortion coefficients will be set to a vector of ones.")
+
+    return camera_matrix, dist_coeffs
 
 dog = Dog(IP_ADDRESS)
 
 def main():
     global dog
     frame_queue = Queue()
+
+    # Read camera parameters from YAML file
+    camera_matrix, dist_coeffs = load_camera_parameters(CAMERA_CALIBRATION_DATA)
+    dog.set_camera_parameters(camera_matrix, dist_coeffs)
 
     # Choose a connection method
     dog.conn = Go2WebRTCConnection(WebRTCConnectionMethod.LocalSTA, ip=dog.ip_address)
@@ -100,9 +130,9 @@ def main():
                 cv2.imshow('Video', img)
                 key_input = cv2.waitKey(1)
 
-                if key_input == 9:  # Tab-Key
-                    dog.toggle_mode()
-                elif dog.mode is ControlMode.MODE_MANUAL.value:
+                dog.set_mode("MODE_MANUAL")
+
+                if dog.mode is ControlMode.MODE_MANUAL.value:
                     dog.process_key(key_input, loop)
 
             else:

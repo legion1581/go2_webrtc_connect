@@ -12,8 +12,6 @@
       {
         devShells.default = pkgs.mkShell {
           buildInputs = [
-            pkgs.stdenv.cc.cc.lib
-            pkgs.hello
             pkgs.python312
             pkgs.python312Packages.pip
             pkgs.python312Packages.setuptools

@@ -23,14 +23,21 @@
             pkgs.portaudio
             pkgs.ffmpeg_6.dev
           ];
+          
           shellHook = ''
-                      # fixes libstdc++ issues and portaudio issues
-                      export LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib/:${pkgs.portaudio}/lib/:$LD_LIBRARY_PATH"
-                      source env/bin/activate
-                      '';
+            export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${
+              with pkgs;
+              lib.makeLibraryPath [ 
+                stdenv.cc.cc.lib
+                portaudio
+                udev
+                SDL2.dev
+                zlib
+              ]
+            }"
+            # Activate python venv
+            source env/bin/activate
+          '';
         };
-
       });
 }
-
-

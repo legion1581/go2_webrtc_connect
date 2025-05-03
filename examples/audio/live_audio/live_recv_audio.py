@@ -4,7 +4,6 @@ import numpy as np
 import pyaudio
 import sys
 from go2_webrtc_driver.webrtc_driver import Go2WebRTCConnection, WebRTCConnectionMethod
-from go2_webrtc_driver.webrtc_video import MediaHandler
 
 # Enable logging for debugging
 logging.basicConfig(level=logging.FATAL)

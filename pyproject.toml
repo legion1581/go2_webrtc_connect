@@ -1,0 +1,30 @@
+[project]
+name = "go2-webrtc-connect"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+
+
+dependencies = [
+    "aiortc==1.9.0",
+    "pycryptodome",
+    "opencv-python",
+    "sounddevice",
+    "pyaudio",
+    "requests",
+    "wasmtime",
+    "flask-socketio",
+    "lz4",
+    "pydub",
+    "loguru>=0.7.3",
+]
+
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.setuptools.packages.find]
+where = ["."]

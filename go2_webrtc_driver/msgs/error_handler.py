@@ -90,3 +90,29 @@ def handle_error(message):
             f"🕒 Time:          {readable_time}\n"
             f"🔢 Error Source:  {error_source_text}\n"
             f"❗ Error Code:    {error_code_text}\n")
+
+def handle_single_error(message):
+    """
+    Handle the error message, print the time, error source, and error message.
+
+    Args:
+        message (dict): The error message containing the data field.
+    """
+
+    timestamp, error_source, error_code_int = message["data"]
+
+    # Convert the timestamp to human-readable format
+    readable_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(timestamp))
+
+    error_source_text = get_error_source_text(error_source)
+
+    # Convert the error code to a hexadecimal string
+    error_code_hex = integer_to_hex_string(error_code_int)
+
+    # Get the error message
+    error_code_text = get_error_code_text(error_source, error_code_hex)
+
+    print(f"\n🚨 Error Received from Go2:\n"
+        f"🕒 Time:          {readable_time}\n"
+        f"🔢 Error Source:  {error_source_text}\n"
+        f"❗ Error Code:    {error_code_text}\n")

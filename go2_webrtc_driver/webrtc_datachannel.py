@@ -94,8 +94,10 @@ class WebRTCDataChannel:
             self.rtc_inner_req.handle_response(msg)
         elif msg_type == DATA_CHANNEL_TYPE["HEARTBEAT"]:
             self.heartbeat.handle_response(msg)
-        elif msg_type in {DATA_CHANNEL_TYPE["ERRORS"], DATA_CHANNEL_TYPE["ADD_ERROR"], DATA_CHANNEL_TYPE["RM_ERROR"]}:
+        elif msg_type == DATA_CHANNEL_TYPE["ERRORS"]:
             handle_error(msg)
+        elif msg_type in {DATA_CHANNEL_TYPE["ADD_ERROR"], DATA_CHANNEL_TYPE["RM_ERROR"]}:
+            handle_single_error(msg)
         elif msg_type == DATA_CHANNEL_TYPE["ERR"]:
             await self.validaton.handle_err_response(msg)
         
